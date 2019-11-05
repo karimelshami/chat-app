@@ -8,7 +8,7 @@ export default class Conversation extends Component {
     this.state = {
       message: '',
       conversationId: 0,
-      someMessages: []
+      allMessages: []
     }
   }
 
@@ -20,10 +20,11 @@ export default class Conversation extends Component {
   }
   getLimitedAmmountOfMessages(conversationId) {
     api
-      .get(`/conversation/${conversationId}/message/limited?limit=10000&offset=3`)
+      .get(`/conversation/${conversationId}/message/limited?limit=100000&offset=0`)
       .then(response => {
           this.setState({
-              someMessages:response.data
+              allMessages:response.data,
+              message:''
           })
         console.log(response)
       })
@@ -31,9 +32,7 @@ export default class Conversation extends Component {
   }
   getAllMessagesAfterSendingAMessage=(lastMessageId)=>{
       api.get(`/conversation/${this.state.conversationId}/new/${lastMessageId}`).then(response=>{
-          this.setState({
-            someMessages:response.data
-          })
+       
           console.log(response)
       }
       ).catch(error=>console.log('error',error))
@@ -52,7 +51,6 @@ export default class Conversation extends Component {
   }
 
   getMessage = message => {
-    console.log(message)
     this.setState({
       message
     })
@@ -66,21 +64,22 @@ export default class Conversation extends Component {
       .post(`/conversation/${this.state.conversationId}/message/send`, body)
       .then(response => {
         this.setState({
-          message: response.data,
+          message: response.data
         })
-        this.getAllMessagesAfterSendingAMessage(response.data.id -1)
+        // this.getAllMessagesAfterSendingAMessage(response.data.id -1)
+        this.getLimitedAmmountOfMessages(this.state.conversationId)
         console.log(response)
       })
       .catch(error => console.log('error', error))
   }
 
   render() {
-    const { someMessages } = this.state
+    const { allMessages } = this.state
     return (
       <div>
     <MessagesContainer>
-            {someMessages && someMessages.length
-            ? someMessages.map((message, index) => {
+            {allMessages && allMessages.length
+            ? allMessages.map((message, index) => {
                 return (
                     <MessageContainer key={index}>
                     <p>{message.message}</p>
@@ -97,7 +96,8 @@ export default class Conversation extends Component {
           <Input
             onChange={event => this.getMessage(event.target.value)}
             type="text"
-            placeholder="  write your message here..."
+            value={this.state.message || ""}
+            placeholder=" write your message here..."
           />
           <Button onClick={() => this.sendMessage()}>Send</Button>
         </InputContainer>

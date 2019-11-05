@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Modal from '../../Components/Modal/Modal'
 import api from '../../API'
 import {
   Table,
@@ -7,14 +8,20 @@ import {
   TableCell,
   TableBody,
   Count,
-  Text
+  Text,
+  Button
 } from './InboxContainer.style'
 export default class InboxContainer extends Component {
   constructor(props) {
     super(props)
     this.state = {
       userId: 0,
-      conversations: []
+      conversations: [],
+      userName:'',
+      openCreateGroupChatModal:false,
+      allUsers:[],
+      selectedUsers:[],
+      groupName:''
     }
   }
   componentDidMount() {
@@ -22,12 +29,83 @@ export default class InboxContainer extends Component {
       console.log(this.props.location.pathname)
       this.getUserIdFromURL(this.props.location.pathname)
     }
+    this.getAllUsers()
+  }
+
+  getAllUsers=()=>{
+    api.get('/users').then(response=>{
+      console.log(response.data)
+      this.setState({
+        allUsers :response.data
+      })
+    })
+  }
+  onUserCheck=(userId)=>{
+   console.log(userId,'checked')
+   let users = this.state.selectedUsers;
+   users.push(userId)
+   console.log(users.join())
+   this.setState({
+     selectedUsers: users
+   },()=>{console.log(this.state.selectedUsers)});
+   
+  }
+  handleGroupNameChange=(groupName)=>{
+    this.setState({
+      groupName
+    })
+  }
+  createGroupConversationModalContent=()=>{
+    const {allUsers}=this.state
+    return(
+    <div>
+      <p>Create a group conversation</p>
+      <input type='text' onChange={(event)=>this.handleGroupNameChange(event.target.value)} placeholder='group name' />
+      {allUsers && allUsers.map((user,index)=>{
+        return(
+          <div key={index}>
+          <input onChange={(event)=>this.onUserCheck(event.target.value)} type="checkbox" value={user.id}/>
+          <span>{user.name}</span>
+          </div>
+        )
+      })}
+      <button onClick={()=>this.createGroup()}>Create Group</button>
+
+    </div>)
+  }
+  createGroup=()=>{
+    let body ={
+      name:this.state.groupName,
+      users :this.state.selectedUsers.join()
+    }
+    api.post('/conversation/group',body).then(response=>{
+      this.setState({
+        openCreateGroupChatModal:false,
+      })
+      console.log(response)
+    }).catch(error=>console.log(error,'error'))
+  }
+  
+  closeCreateGroupChatModal=()=>{
+    this.setState({
+      openCreateGroupChatModal:false
+    })
+  }
+
+  getUserDetails(userId){
+    api.get(`/user/${userId}`).then(response=>{
+      console.log(response.data)
+      this.setState({
+        userName :response.data.name
+      })
+    })
   }
 
   openConversation=(conversationId)=>{
       console.log(conversationId)
       this.props.history.push(`/conversation/id=${conversationId}`)
     }
+
   getUserIdFromURL(pathName) {
     let index = pathName.indexOf('=') + 1
     if (index) {
@@ -37,6 +115,8 @@ export default class InboxContainer extends Component {
         userId
       })
       this.getAllConversationsForUser(userId)
+      this.getUserDetails(userId)
+
     }
   }
   getAllConversationsForUser = userId => {
@@ -52,12 +132,20 @@ export default class InboxContainer extends Component {
       })
       .catch(error => console.log('error', error))
   }
+
+  createGroupChatModal=()=>{
+    console.log('open create group modal')
+    this.setState({
+      openCreateGroupChatModal:true
+    })
+  }
   render() {
-    const { conversations } = this.state
+    const { conversations ,userName,openCreateGroupChatModal} = this.state
     return (
       <div>
+        <Button onClick={()=>this.createGroupChatModal()}>Create a group Chat</Button>
         <Text>
-          You Have <Count>{conversations ? conversations.length : ''}</Count>{' '}
+          Hey {userName},You Have <Count>{conversations ? conversations.length : ''}</Count>{' '}
           Conversations
         </Text>
         <Table>
@@ -121,6 +209,11 @@ export default class InboxContainer extends Component {
               })}
           </TableBody>
         </Table>
+        <Modal
+        closeModal={this.closeCreateGroupChatModal} 
+        closed={openCreateGroupChatModal}
+        modalContent={this.createGroupConversationModalContent()}
+        />
       </div>
     )
   }

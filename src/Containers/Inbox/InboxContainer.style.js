@@ -1,6 +1,11 @@
 
 import styled from 'styled-components'
 
+export const Button=styled.button`
+float:right;
+cursor:pointer;
+
+`
 export const Table = styled.table`
   width: 100%;
   margin: auto;

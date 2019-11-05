@@ -2,26 +2,24 @@ Chat app API documentation
 
 List of APIs 
 
-1. Get All users
+1. Get All users *used*
 
     /users
     GET
-    Can used to list all the users in the inbox
+    Can be used to create a group chat.
     returns an Array of users,each user has a name and an Id
 
-2. Get a single user by id
+2. Get a single user by id *used*
 
     /user/:id
     GET
-    Basicly the login,user choose which user to log in with,so user logs in with user Id
     returns one users with name and Id
 
 
-3. Poll all new messages after last MessageId *used but not finished*
+3. Poll all new messages after last MessageId *used*
 
    /conversation/:conversationId/new/:last MessageId
    GET
-   *No use case yet*
     return the array of messages objects that come after the id given.
     Example response :
     {“id":"1",
@@ -30,7 +28,7 @@ List of APIs
     "timestamp":"2014-10-1608:14:55”,
     "conversationid":"2","status":"0"}
 
-4. Get a limited amount of messages *used*
+4. Get a limited amount of messages *used but not finished as i couldn't find a use case*
 
   /conversation/:conversationId/message/limited
   GET
@@ -43,7 +41,7 @@ List of APIs
   "timestamp":"2014-10-2411:42:27",
   "conversationid":"1","status":"0"}
 
-5. Get the last seen timestamp for the given user
+5. Get the last seen timestamp for the given user 
 
     /conversation/:conversationId/lastseen/:userId
     GET
@@ -123,7 +121,7 @@ List of APIs
     Example body:
         {“users”:"1,2,3"}
 
-10. Create a new group conversation
+10. Create a new group conversation *used*
 
     /conversation/group
     POST
