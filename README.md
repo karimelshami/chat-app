@@ -1,68 +1,148 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Chat app API documentation 
 
-## Available Scripts
+List of APIs 
 
-In the project directory, you can run:
+1. Get All users
 
-### `yarn start`
+    /users
+    GET
+    Can used to list all the users in the inbox
+    returns an Array of users,each user has a name and an Id
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+2. Get a single user by id
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+    /user/:id
+    GET
+    Basicly the login,user choose which user to log in with,so user logs in with user Id
+    returns one users with name and Id
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. Poll all new messages after lastMessageId
 
-### `yarn build`
+   /conversation/:conversationId/new/:lastMessageId
+   GET
+   *No use case yet*
+    return the array of messages objects that come after the id given.
+    Example response :
+    {“id":"1",
+    "senderId":"5",
+    "message":"The first message",
+    "timestamp":"2014-10-1608:14:55”,
+    "conversationid":"2","status":"0"}
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. Get a limited amount of messages
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+  /conversation/:conversationId/message/limited
+  GET
+ *No use case yet*
+  Takes limit and offset as query params and returns an array of messages objects
+  Example response :
+  {"id":"30",
+  "senderId":"1",
+  "message":"Bang bang",
+  "timestamp":"2014-10-2411:42:27",
+  "conversationid":"1","status":"0"}
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. Get the last seen timestamp for the given user
 
-### `yarn eject`
+    /conversation/:conversationId/lastseen/:userId
+    GET
+    Takes userId and ConversationId and returns lastseen time stamp
+    Example response :
+    {"lastseen":"2014-10-16 07:08:27"}
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+6. Get the conversation details for one conversation
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    /conversation/:id
+    GET
+    Take an a conversation Id and returns all the conversation with a conversation object and users object.
+    Example response: 
+    {"conversation":
+        {"id":"2",
+        "name":"Groupchat!",
+        "status":"1",
+        "type":"2"},
+    "users":
+        [{"id":"20",
+        "conversationId":"2",
+        "is_owner":"1",
+        "userid":"5",
+        "status":"0",
+        "lastseen":"2014-10-16 07:08:27"},
+        {"id":"21",
+        "conversationId":"2",
+        "is_owner":"0",
+        "userid":"1",
+        "status":"0",
+        "lastseen":null}]
+    }
+    
+7. Get all conversations for one user
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+    /conversation/user/:id
+    GET
+    Takes user id and returns an array of conversations of the user
+    Example response: 
+        [{"conversation":
+            {"id":"1",
+            "conversationId":"1",
+            "is_owner":"0",
+            "userid":"2",
+            "status":"1",
+            "lastseen":null,
+            "name":null,
+            "type":"1"},
+        "users":
+            [{"id":"16",
+            "conversationId":"1",
+            "is_owner":"1",
+            "userid":"5",
+            "status":"0",
+            "lastseen":null},
+            {"id":"19",
+            "conversationId":"1",
+            "is_owner":"0",
+            "userid":"2",
+            "status":"0",
+            "lastseen":null}]}]
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+8. Send a message 
 
-## Learn More
+    /conversation/:conversationid/message/send
+    POST
+    Sends a massage to a conversation and returns a message Id
+    Example body:
+        {"message":"sample",
+        "senderId":5}
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+9. Create a new personal conversation
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    /conversation/personal
+    POST
+    Creates a personal conversation,accepts a string of users and returns conversation id.
+    Example body:
+        {“users”:"1,2,3"}
 
-### Code Splitting
+10. Create a new group conversation
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+    /conversation/group
+    POST
+    Creates a group conversation,accepts a string of users and a group name and returns a conversation id.
+    Example body:
+        {“users”:”1,2,3”,
+        ”name”:”Group chat !”}
 
-### Analyzing the Bundle Size
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+11. Edit Lastseen timestamp
 
-### Making a Progressive Web App
+    /conversation/:conversationId/seen/:userId
+    PUT
+    User timestamp with input of conversationId and userId and returns timestamp
+    Example response :
+        {"lastseen":"2014-10-16 07:08:27"}
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
 
-### Advanced Configuration
+    
+            
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
 
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
