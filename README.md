@@ -17,9 +17,9 @@ List of APIs
     returns one users with name and Id
 
 
-3. Poll all new messages after lastMessageId
+3. Poll all new messages after last MessageId
 
-   /conversation/:conversationId/new/:lastMessageId
+   /conversation/:conversationId/new/:last MessageId
    GET
    *No use case yet*
     return the array of messages objects that come after the id given.
@@ -51,7 +51,7 @@ List of APIs
     Example response :
     {"lastseen":"2014-10-16 07:08:27"}
 
-6. Get the conversation details for one conversation
+6. Get the conversation details for one conversation 
 
     /conversation/:id
     GET
@@ -77,7 +77,7 @@ List of APIs
         "lastseen":null}]
     }
     
-7. Get all conversations for one user
+7. Get all conversations for one user *used*
 
     /conversation/user/:id
     GET
@@ -106,7 +106,7 @@ List of APIs
             "status":"0",
             "lastseen":null}]}]
 
-8. Send a message 
+8. Send a message *used*
 
     /conversation/:conversationid/message/send
     POST
