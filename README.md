@@ -17,7 +17,7 @@ List of APIs
     returns one users with name and Id
 
 
-3. Poll all new messages after last MessageId
+3. Poll all new messages after last MessageId *used but not finished*
 
    /conversation/:conversationId/new/:last MessageId
    GET
@@ -30,7 +30,7 @@ List of APIs
     "timestamp":"2014-10-1608:14:55”,
     "conversationid":"2","status":"0"}
 
-4. Get a limited amount of messages
+4. Get a limited amount of messages *used*
 
   /conversation/:conversationId/message/limited
   GET

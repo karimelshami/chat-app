@@ -31,5 +31,5 @@ margin:auto;
 padding:1px 5px;
 background-color:#f4f7fd;
 margin:5px;
-border-raduis:5px;
+border-radius: 5px;
 `

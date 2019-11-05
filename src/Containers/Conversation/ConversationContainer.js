@@ -29,6 +29,15 @@ export default class Conversation extends Component {
       })
       .catch(error => console.log('error', error))
   }
+  getAllMessagesAfterSendingAMessage=(lastMessageId)=>{
+      api.get(`/conversation/${this.state.conversationId}/new/${lastMessageId}`).then(response=>{
+          this.setState({
+            someMessages:response.data
+          })
+          console.log(response)
+      }
+      ).catch(error=>console.log('error',error))
+  }
 
   getConversationIdFromURL(pathName) {
     let index = pathName.indexOf('=') + 1
@@ -57,8 +66,9 @@ export default class Conversation extends Component {
       .post(`/conversation/${this.state.conversationId}/message/send`, body)
       .then(response => {
         this.setState({
-          message: response.data
+          message: response.data,
         })
+        this.getAllMessagesAfterSendingAMessage(response.data.id -1)
         console.log(response)
       })
       .catch(error => console.log('error', error))
