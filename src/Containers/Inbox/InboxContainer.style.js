@@ -7,7 +7,7 @@ export const FormOption=styled.div`
 margin:2px;
 `
 export const Button=styled.button`
-display:block;
+display:inline-block;
 cursor:pointer;
 margin:10px;
 box-shadow: 0px 10px 18px -7px #276873;
@@ -77,7 +77,7 @@ export const Count=styled.span`
 font-size:18px;
 color:red;
 `
-export const Text=styled.span`
+export const Text=styled.p`
 font-size:18px;
 
 `
@@ -100,4 +100,10 @@ export const UserName=styled.span`
 color:#808080
 padding:5px;
 
+`
+export const HelperText=styled.p`
+
+color:#808080
+text-align:center;
+font-size:18px;
 `

@@ -46,7 +46,7 @@ export default class Conversation extends Component {
       .get(`/conversation/${conversationId}/message/limited?limit=100000&offset=0`)
       .then(response => {
           this.setState({
-              allMessages:response.data,
+              allMessages:response.data.reverse(),
               message:''
           })
         console.log(response)

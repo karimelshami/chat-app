@@ -1,3 +1,22 @@
+Read this to understand the APP flow:
+
+This App consists of Three screens
+1.Login Page
+-The login screen has an input feild which accepts USER ID which simulates user authantication,however this could have been implemented differently by only selected the desired user to accses his conversation.
+-After the user writes down the user ID and clickes login the user id is passed as a query string in the URL,this was implemented to make the URL dynamic to have different URLs for different users
+-The user id is taken from the URL and set in the containers state to be able to call all the APIs which require the user Id.
+2.Inbox Page 
+-The inbox page is intialized by calling Get user conversations using user ID which renders all the user Conversations in a table.
+-User can click on Create personal Conversation/Create Group Conversation to create a new Conversation.
+-User can click on any conversation to open it in the conversation page.
+-Conversation Id and user Id are passed in the URL to differentiate between users.
+
+3.Conversation Page 
+-Once the conversation is opened the last seen API is called to put a new timestamp
+-User can send messages and refresh to check if he recived a message
+
+
+
 Chat app API documentation 
 
 List of APIs 
@@ -42,7 +61,7 @@ List of APIs
   "timestamp":"2014-10-2411:42:27",
   "conversationid":"1","status":"0"}
 
-5. Get the last seen timestamp for the given user 
+5. Get the last seen timestamp for the given user *used but no use case* 
 
     /conversation/:conversationId/lastseen/:userId
     GET
@@ -50,7 +69,7 @@ List of APIs
     Example response :
     {"lastseen":"2014-10-16 07:08:27"}
 
-6. Get the conversation details for one conversation *no use case yet*
+6. Get the conversation details for one conversation *no use case yet so not used*
 
     /conversation/:id
     GET
@@ -114,7 +133,7 @@ List of APIs
         {"message":"sample",
         "senderId":5}
 
-9. Create a new personal conversation
+9. Create a new personal conversation *used*
 
     /conversation/personal
     POST
@@ -132,7 +151,7 @@ List of APIs
         ”name”:”Group chat !”}
 
 
-11. Edit Lastseen timestamp
+11. Edit Lastseen timestamp *used*
 
     /conversation/:conversationId/seen/:userId
     PUT

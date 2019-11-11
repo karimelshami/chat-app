@@ -12,7 +12,8 @@ import {
   Button,
   Input,
   UserName,
-  FormOption
+  FormOption,
+  HelperText
 } from './InboxContainer.style'
 export default class InboxContainer extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ export default class InboxContainer extends Component {
       conversations: [],
       userName:'',
       openCreateGroupChatModal:false,
+      openCreatePersonalChatModal:false,
       allUsers:[],
       selectedUsers:[],
       groupName:''
@@ -50,21 +52,24 @@ export default class InboxContainer extends Component {
    let users = this.state.selectedUsers;
    users.push(userId)
    console.log(users.join())
-   this.setState({
-     selectedUsers: users
-   },()=>{console.log(this.state.selectedUsers)});
-   
+   setTimeout(() => {
+    this.setState({
+      selectedUsers: users
+    });}, 300);
+ 
   }
   handleGroupNameChange=(groupName)=>{
-    this.setState({
-      groupName
-    })
+    setTimeout(() => {
+      this.setState({
+        groupName
+      })    }, 300);
+  
   }
   createGroupConversationModalContent=()=>{
     const {allUsers}=this.state
     return(
     <div>
-      <p>Create a group conversation</p>
+      <HelperText>Create a group conversation</HelperText>
       <Input type='text' onChange={(event)=>this.handleGroupNameChange(event.target.value)} placeholder='group name' />
       {allUsers && allUsers.map((user,index)=>{
         return(
@@ -78,6 +83,41 @@ export default class InboxContainer extends Component {
 
     </div>)
   }
+
+  createPersonalConversationModalContent=()=>{
+
+    const {allUsers}=this.state
+    return(
+    <div>
+      <HelperText>Create a Personal conversation</HelperText>
+      {allUsers && allUsers.map((user,index)=>{
+        return(
+          <FormOption key={index}>
+          <Input onClick={(event)=>this.onUserCheck(event.target.value)} type="checkbox" value={user.id}/>
+          <UserName>{user.name}</UserName>
+          </FormOption>
+        )
+      })}
+      <Button onClick={()=>this.createPersonalConversation()}>Create Personal Conversation</Button>
+
+    </div>)
+
+  }
+
+  createPersonalConversation=()=>{
+    let body ={
+      users :this.state.selectedUsers.join()
+    }
+    api.post('/conversation/personal',body).then(response=>{
+      this.setState({
+        openCreatePersonalChatModal:false,
+      })
+      this.getAllConversationsForUser(this.state.userId)
+
+      console.log(response)
+    }).catch(error=>console.log(error,'error'))
+  }
+
   createGroup=()=>{
     let body ={
       name:this.state.groupName,
@@ -87,6 +127,8 @@ export default class InboxContainer extends Component {
       this.setState({
         openCreateGroupChatModal:false,
       })
+  this.getAllConversationsForUser(this.state.userId)
+      
       console.log(response)
     }).catch(error=>console.log(error,'error'))
   }
@@ -94,6 +136,11 @@ export default class InboxContainer extends Component {
   closeCreateGroupChatModal=()=>{
     this.setState({
       openCreateGroupChatModal:false
+    })
+  }
+  closeCreatePersonalChatModal=()=>{
+    this.setState({
+      openCreatePersonalChatModal:false
     })
   }
 
@@ -129,8 +176,9 @@ export default class InboxContainer extends Component {
       .get(`/conversation/user/${userId}`)
       .then(response => {
         if (response && response.data) {
+
           this.setState({
-            conversations: response.data
+            conversations: response.data.reverse()
           })
           console.log(response, 'all conversations for user')
         }
@@ -144,11 +192,19 @@ export default class InboxContainer extends Component {
       openCreateGroupChatModal:true
     })
   }
+  createPersonalChatModal=()=>{
+    console.log('open personal group modal')
+    this.setState({
+      openCreatePersonalChatModal:true
+    })
+  }
   render() {
-    const { conversations ,userName,openCreateGroupChatModal} = this.state
+    const { conversations ,userName,openCreateGroupChatModal,openCreatePersonalChatModal} = this.state
     return (
       <div>
         <Button onClick={()=>this.createGroupChatModal()}>Create a group Chat</Button>
+        <Button onClick={()=>this.createPersonalChatModal()}>Create a personal Chat</Button>
+
         <Text>
           Hey {userName},You Have <Count>{conversations ? conversations.length : ''}</Count>{' '}
           Conversations
@@ -218,6 +274,11 @@ export default class InboxContainer extends Component {
         closeModal={this.closeCreateGroupChatModal} 
         closed={openCreateGroupChatModal}
         modalContent={this.createGroupConversationModalContent()}
+        />
+        <Modal
+        closeModal={this.closeCreatePersonalChatModal} 
+        closed={openCreatePersonalChatModal}
+        modalContent={this.createPersonalConversationModalContent()}
         />
       </div>
     )
