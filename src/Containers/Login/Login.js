@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Lock from '../../Assets/lock.png'
+import Lock from '../../Assets/lock.gif'
 import {
     Image,
     Container,

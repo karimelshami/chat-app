@@ -9,7 +9,10 @@ import {
   TableBody,
   Count,
   Text,
-  Button
+  Button,
+  Input,
+  UserName,
+  FormOption
 } from './InboxContainer.style'
 export default class InboxContainer extends Component {
   constructor(props) {
@@ -32,13 +35,15 @@ export default class InboxContainer extends Component {
     this.getAllUsers()
   }
 
+  
+
   getAllUsers=()=>{
     api.get('/users').then(response=>{
       console.log(response.data)
       this.setState({
         allUsers :response.data
       })
-    })
+    }).catch(error=>console.log(error,'error'))
   }
   onUserCheck=(userId)=>{
    console.log(userId,'checked')
@@ -60,16 +65,16 @@ export default class InboxContainer extends Component {
     return(
     <div>
       <p>Create a group conversation</p>
-      <input type='text' onChange={(event)=>this.handleGroupNameChange(event.target.value)} placeholder='group name' />
+      <Input type='text' onChange={(event)=>this.handleGroupNameChange(event.target.value)} placeholder='group name' />
       {allUsers && allUsers.map((user,index)=>{
         return(
-          <div key={index}>
-          <input onChange={(event)=>this.onUserCheck(event.target.value)} type="checkbox" value={user.id}/>
-          <span>{user.name}</span>
-          </div>
+          <FormOption key={index}>
+          <Input onClick={(event)=>this.onUserCheck(event.target.value)} type="checkbox" value={user.id}/>
+          <UserName>{user.name}</UserName>
+          </FormOption>
         )
       })}
-      <button onClick={()=>this.createGroup()}>Create Group</button>
+      <Button onClick={()=>this.createGroup()}>Create Group Conversation</Button>
 
     </div>)
   }
@@ -103,7 +108,7 @@ export default class InboxContainer extends Component {
 
   openConversation=(conversationId)=>{
       console.log(conversationId)
-      this.props.history.push(`/conversation/id=${conversationId}`)
+      this.props.history.push(`/conversation/id=${conversationId},userId=${this.state.userId}`)
     }
 
   getUserIdFromURL(pathName) {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { HelperText, InputContainer, Input, Button ,MessagesContainer,MessageContainer} from './Conversation.style'
+import { HelperText, InputContainer, Input, Button ,MessagesContainer,MessageContainer,Text,TimeStamp,LastSeen} from './Conversation.style'
 import api from '../../API'
 
 export default class Conversation extends Component {
@@ -8,7 +8,9 @@ export default class Conversation extends Component {
     this.state = {
       message: '',
       conversationId: 0,
-      allMessages: []
+      allMessages: [],
+      userId:0,
+      lastseen:''
     }
   }
 
@@ -16,7 +18,28 @@ export default class Conversation extends Component {
     if (this.props.location && this.props.location.pathname) {
       console.log(this.props.location.pathname)
       this.getConversationIdFromURL(this.props.location.pathname)
+      this.getUserIdFromURL(this.props.location.pathname)
     }
+  }
+
+  putLastSeenTimeStamp =()=>{
+    let body={
+      lastseen:Date.now().toString()
+    }
+    api.put(`/conversation/${this.state.conversationId}/seen/${this.state.userId}`,body).then(response =>{
+      console.log(response,' seen')
+      this.setState({
+        lastseen:response.data.lastseen
+      })
+    }).catch(error=>console.log(error,'error'))
+  }
+
+  
+  getLastSeenTimeStamp =()=>{
+    api.get(`/conversation/${this.state.conversationId}/lastseen/${this.state.userId}`).then(response =>{
+      console.log(response,'last seen')
+
+    }).catch(error=>console.log(error,'error'))
   }
   getLimitedAmmountOfMessages(conversationId) {
     api
@@ -42,14 +65,30 @@ export default class Conversation extends Component {
     let index = pathName.indexOf('=') + 1
     if (index) {
       let conversationId = pathName.substr(index)
+      let conversationIdIndex=conversationId.indexOf(',')
+      conversationId = conversationId.slice(0,conversationIdIndex)
+      conversationId = parseInt(conversationId)
+      console.log(conversationId,'conversation Id')
       conversationId = parseInt(conversationId)
       this.setState({
         conversationId
-      })
+      },()=>this.putLastSeenTimeStamp())
       this.getLimitedAmmountOfMessages(conversationId)
     }
-  }
 
+  }
+  getUserIdFromURL(pathName){
+    console.log(pathName)
+    let index = pathName.indexOf(",")+8
+    console.log(index)
+    if (index) {
+      let userId = pathName.substr(index)
+      userId = parseInt(userId)
+      this.setState({
+        userId
+      },()=>this.getLastSeenTimeStamp())
+    }
+  } 
   getMessage = message => {
     this.setState({
       message
@@ -76,21 +115,21 @@ export default class Conversation extends Component {
   render() {
     const { allMessages } = this.state
     return (
-      <div>
-    <MessagesContainer>
+      <>
+        <LastSeen>Last Seen on {this.state.lastseen}</LastSeen>
+        <Button onClick={()=>{this.getLimitedAmmountOfMessages(this.state.conversationId)}}>Refresh Conversation</Button>
+      <MessagesContainer>
             {allMessages && allMessages.length
             ? allMessages.map((message, index) => {
                 return (
                     <MessageContainer key={index}>
-                    <p>{message.message}</p>
-                    <p>{message.timestamp}</p>
+                    <Text>{message.message}</Text>
+                    <TimeStamp>{message.timestamp}</TimeStamp>
                     </MessageContainer>
                 )
                 })
             : ''}
     </MessagesContainer>
-
-
         <InputContainer>
           <HelperText>Send message to user</HelperText>
           <Input
@@ -101,7 +140,7 @@ export default class Conversation extends Component {
           />
           <Button onClick={() => this.sendMessage()}>Send</Button>
         </InputContainer>
-      </div>
+      </>
     )
   }
 }

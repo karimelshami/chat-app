@@ -28,11 +28,12 @@ List of APIs
     "timestamp":"2014-10-1608:14:55”,
     "conversationid":"2","status":"0"}
 
-4. Get a limited amount of messages *used but not finished as i couldn't find a use case*
+4. Get a limited amount of messages *used* 
+
 
   /conversation/:conversationId/message/limited
   GET
- *No use case yet*
+ used by sending offset zero to get all the latest user messages,couldn't find any use case for using offset
   Takes limit and offset as query params and returns an array of messages objects
   Example response :
   {"id":"30",
@@ -49,7 +50,7 @@ List of APIs
     Example response :
     {"lastseen":"2014-10-16 07:08:27"}
 
-6. Get the conversation details for one conversation 
+6. Get the conversation details for one conversation *no use case yet*
 
     /conversation/:id
     GET
