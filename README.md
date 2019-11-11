@@ -1,10 +1,12 @@
 Read this to understand the APP flow:
 
 This App consists of Three screens
+
 1.Login Page
--The login screen has an input feild which accepts USER ID which simulates user authantication,however this could have been implemented differently by only selected the desired user to accses his conversation.
+-The login screen has an input feild which accepts USER ID which simulates user authantication,however this could have been implemented differently by only selecting the desired user to accses his conversation.
 -After the user writes down the user ID and clickes login the user id is passed as a query string in the URL,this was implemented to make the URL dynamic to have different URLs for different users
 -The user id is taken from the URL and set in the containers state to be able to call all the APIs which require the user Id.
+
 2.Inbox Page 
 -The inbox page is intialized by calling Get user conversations using user ID which renders all the user Conversations in a table.
 -User can click on Create personal Conversation/Create Group Conversation to create a new Conversation.
@@ -14,6 +16,8 @@ This App consists of Three screens
 3.Conversation Page 
 -Once the conversation is opened the last seen API is called to put a new timestamp
 -User can send messages and refresh to check if he recived a message
+
+---------------------------------------------------------------------------------------------------------------
 
 
 
