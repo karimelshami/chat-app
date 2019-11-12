@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.js": "/karimelshami/chat-app/static/js/main.eb114e50.chunk.js",
+    "main.js.map": "/karimelshami/chat-app/static/js/main.eb114e50.chunk.js.map",
+    "runtime-main.js": "/karimelshami/chat-app/static/js/runtime-main.cf709478.js",
+    "runtime-main.js.map": "/karimelshami/chat-app/static/js/runtime-main.cf709478.js.map",
+    "static/js/2.d1d87144.chunk.js": "/karimelshami/chat-app/static/js/2.d1d87144.chunk.js",
+    "static/js/2.d1d87144.chunk.js.map": "/karimelshami/chat-app/static/js/2.d1d87144.chunk.js.map",
+    "index.html": "/karimelshami/chat-app/index.html",
+    "precache-manifest.4d522ad8a61d48fd314b1af8139f9a37.js": "/karimelshami/chat-app/precache-manifest.4d522ad8a61d48fd314b1af8139f9a37.js",
+    "service-worker.js": "/karimelshami/chat-app/service-worker.js",
+    "static/media/bunq.svg": "/karimelshami/chat-app/static/media/bunq.139cf12c.svg",
+    "static/media/lock.gif": "/karimelshami/chat-app/static/media/lock.5005dbcc.gif"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.cf709478.js",
+    "static/js/2.d1d87144.chunk.js",
+    "static/js/main.eb114e50.chunk.js"
+  ]
+}
