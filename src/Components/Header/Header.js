@@ -1,5 +1,5 @@
 import React from 'react'
-import Logo from '../../Assets/bunq.svg'
+// import Logo from '../../Assets/bunq.svg'
 import {
     Brand,
     Separator,
@@ -8,7 +8,7 @@ import {
 const Header=()=>{
     return(
         <>
-        <Brand src={Logo} alt='brand'/>
+        {/* <Brand src={Logo} alt='brand'/> */}
         <Separator>
             <SeparatorPart rainbowOne/>
             <SeparatorPart rainbowTwo/>

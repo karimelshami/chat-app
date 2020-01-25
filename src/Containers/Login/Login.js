@@ -17,6 +17,29 @@ export default class Login extends Component {
             userId : 0
         }
     }
+    componentWillMount(){
+        let A = [1, 3, 6, 4, 1, 2];
+        let sortedA = A.sort()
+        console.log(sortedA)
+        let i = 0;
+        let returnValue;
+        while(A.length >= i){
+            if((sortedA[i] - sortedA[i+1]) > 1){
+                 returnValue =sortedA[i] +1;
+                 console.log(returnValue)
+                 if(returnValue <= 0){
+                     returnValue =1;
+                     console.log(returnValue)
+                     return 1
+                 }
+                return returnValue
+            }
+            i = i+1;
+        }
+        returnValue = sortedA[sortedA.length-1]+1;
+        console.log(returnValue)
+        return returnValue;
+    }
     getUserId=(userId)=>{
         console.log(userId)
         this.setState({userId})
